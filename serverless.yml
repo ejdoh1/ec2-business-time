@@ -1,0 +1,22 @@
+frameworkVersion: =1.58.0
+
+service: ec2-business-time
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: ap-southeast-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action: ec2:*
+      Resource: '*'
+
+functions:
+  off:
+    handler: handler.off
+    events:
+      - schedule: cron(30 11 * * ? *) # 11:30 AM (UTC) every day, 10:30PM Melbourne time
+  on:
+    handler: handler.on
+    events:
+      - schedule: cron(0 22 * * ? *) # 10:00 PM (UTC) every day, 9AM Melbourne time
